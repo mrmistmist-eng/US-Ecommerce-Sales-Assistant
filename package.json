@@ -1,0 +1,39 @@
+{
+  "name": "us-ecommerce-sales-assistant",
+  "version": "2.0.0",
+  "description": "美国电商销售助手 V2",
+  "main": "main.js",
+  "author": "US Ecommerce Sales Assistant",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.usecommerce.salesassistant",
+    "productName": "美国电商销售助手",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "美国电商销售助手"
+    }
+  }
+}

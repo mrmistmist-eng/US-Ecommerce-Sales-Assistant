@@ -1,0 +1,52 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>美国电商销售助手 V2</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:#172033;font-family:Segoe UI,Arial,sans-serif}header{background:#172033;color:#fff;padding:22px 30px;display:flex;justify-content:space-between;align-items:center}h1{margin:0;font-size:27px}main{max-width:1400px;margin:auto;padding:22px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:15px;padding:17px;box-shadow:0 2px 8px #00000008}.stat b{display:block;font-size:27px;margin:5px 0}.muted{color:#667085;font-size:13px}.hero{margin:16px 0;background:#fff;border:1px solid #e5e7eb;border-radius:15px;padding:20px}.hero h2{margin:7px 0;font-size:27px}.badge{display:inline-block;padding:5px 10px;border-radius:99px;font-size:12px;font-weight:700}.b3{background:#fee4e2;color:#b42318}.b2{background:#fef0c7;color:#b54708}.b1{background:#fff6d8;color:#8a4b00}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}select,input,button{padding:10px 12px;border:1px solid #d8dee8;border-radius:9px;background:#fff;font-size:14px}button{cursor:pointer}.primary{background:#172033;color:#fff}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{padding:9px 13px;border-radius:9px;background:#e9edf3;cursor:pointer}.active{background:#172033;color:#fff}.task{display:flex;justify-content:space-between;align-items:center;padding:11px;background:#f8fafc;border-radius:10px;margin:8px 0}.task input{width:18px;height:18px}table{width:100%;border-collapse:collapse}th,td{padding:11px 8px;border-bottom:1px solid #edf0f4;text-align:left;font-size:14px}th{color:#667085}.modal{display:none;position:fixed;inset:0;background:#0008;align-items:center;justify-content:center}.modal>div{background:#fff;padding:22px;border-radius:15px;width:min(600px,92%)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid label{font-size:13px;color:#475467}.formgrid input{width:100%;margin-top:4px}.rowbtn{display:flex;gap:8px;justify-content:flex-end;margin-top:15px}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid,.formgrid{grid-template-columns:1fr}}
+</style></head><body>
+<header><div><h1>🇺🇸 美国电商销售助手</h1><div style="opacity:.75;margin-top:5px">V2 · 节日、备货、广告、促销、产品管理</div></div><div id="clock"></div></header>
+<main>
+<div class="grid">
+<div class="card stat"><div class="muted">下一个重大节点</div><b id="nextName">—</b><div id="nextDate" class="muted">—</div></div>
+<div class="card stat"><div class="muted">倒计时</div><b id="days">—</b><div class="muted">天</div></div>
+<div class="card stat"><div class="muted">未来90天重点节点</div><b id="n90">—</b><div class="muted">个</div></div>
+<div class="card stat"><div class="muted">我的产品</div><b id="pcount">0</b><div class="muted">个</div></div>
+</div>
+<div class="hero"><span id="badge" class="badge b3">—</span><h2 id="big">—</h2><div class="muted" id="advice">—</div><div id="timeline" style="margin-top:13px"></div></div>
+<div class="tabs"><div class="tab active" onclick="showTab('dashboard',this)">今日行动</div><div class="tab" onclick="showTab('products',this)">我的产品</div><div class="tab" onclick="showTab('calendar',this)">销售日历</div></div>
+<section id="dashboard">
+<div class="card"><h3>🎯 今天应该做什么</h3><div id="tasks"></div></div>
+<div class="card" style="margin-top:14px"><h3>📣 渠道作战</h3><div class="grid">
+<div><b>Amazon</b><div class="muted">Listing / PPC / Coupon</div></div><div><b>Shopify</b><div class="muted">独立站 / Email / Meta</div></div><div><b>Wayfair</b><div class="muted">家居流量 / 产品资料</div></div><div><b>Walmart</b><div class="muted">价格 / 库存 / 促销</div></div>
+</div></div></section>
+<section id="products" style="display:none"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>📦 我的产品</h3><button class="primary" onclick="openProduct()">＋ 添加产品</button></div><table><thead><tr><th>产品</th><th>成本</th><th>售价</th><th>毛利</th><th>库存</th><th>运输天数</th><th></th></tr></thead><tbody id="productsRows"></tbody></table></div></section>
+<section id="calendar" style="display:none"><div class="card"><div class="toolbar"><select id="year"><option>2026</option><option>2027</option></select><select id="imp"><option value="all">全部</option><option value="3">🔴 超级重要</option><option value="2">🟠 重要</option></select><input id="q" placeholder="搜索节日"></div><table><thead><tr><th>日期</th><th>节点</th><th>重要度</th><th>地毯营销建议</th><th>行动</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+</main>
+<div class="modal" id="modal"><div><h2>添加产品</h2><div class="formgrid">
+<label>产品名称<input id="pn"></label><label>成本（$）<input id="pc" type="number" step="0.01"></label>
+<label>售价（$）<input id="pp" type="number" step="0.01"></label><label>库存<input id="pi" type="number"></label>
+<label>运输天数<input id="pt" type="number"></label><label>供应商/备注<input id="ps"></label>
+</div><div class="rowbtn"><button onclick="closeProduct()">取消</button><button class="primary" onclick="saveProduct()">保存</button></div></div></div>
+<script>
+const E=[["2026-09-07", "Labor Day 劳动节", 3, "秋季家居焕新；Labor Day Sale"], ["2026-09-22", "Fall 秋季开始", 2, "Fall Home Decor；暖色、复古、可机洗地毯"], ["2026-10-31", "Halloween 万圣节", 3, "Halloween Rugs / Door Mats；提前6–8周准备"], ["2026-11-11", "Veterans Day", 2, "感恩节前促销窗口"], ["2026-11-26", "Thanksgiving 感恩节", 3, "家庭聚会；客厅/餐厅地毯"], ["2026-11-27", "Black Friday 黑色星期五", 3, "全年核心大促；提前6–8周备货"], ["2026-11-30", "Cyber Monday", 3, "独立站/数字广告核心节点"], ["2026-12-25", "Christmas 圣诞节", 3, "Holiday Home / Gift / Winter"], ["2027-01-01", "New Year's Day 元旦", 3, "New Year Home Refresh"], ["2027-01-18", "Martin Luther King Jr. Day", 2, "冬季促销节点"], ["2027-02-14", "Valentine's Day 情人节", 3, "Romantic Home；粉红/红色、卧室地毯"], ["2027-02-15", "Presidents' Day", 3, "Presidents' Day Sale；冬季清仓"], ["2027-03-17", "St. Patrick's Day", 2, "绿色、节日主题小地毯"], ["2027-03-20", "Spring 春季开始", 3, "Spring Home Refresh；花卉、浅色"], ["2027-03-28", "Easter 复活节", 3, "Spring / Easter Home"], ["2027-05-09", "Mother's Day 母亲节", 3, "Gift for Mom；家居礼物"], ["2027-05-31", "Memorial Day", 3, "大型 Memorial Day Sale；夏季家居"], ["2027-06-20", "Father's Day 父亲节", 3, "Gift for Dad；客厅/男士家居"], ["2027-07-05", "Independence Day / July 4th observed", 3, "7/4 Sale；美国主题、夏季"], ["2027-08-01", "Back to School 开学季", 2, "宿舍、卧室、小尺寸地毯"], ["2027-09-06", "Labor Day 劳动节", 3, "Fall Home Refresh；秋季新品"], ["2027-10-31", "Halloween 万圣节", 3, "Halloween Rugs / Door Mats"], ["2027-11-11", "Veterans Day", 2, "感恩节前促销"], ["2027-11-25", "Thanksgiving 感恩节", 3, "家庭聚会、餐厅/客厅地毯"], ["2027-11-26", "Black Friday 黑色星期五", 3, "全年最大销售窗口之一"], ["2027-11-29", "Cyber Monday", 3, "独立站/数字广告核心节点"], ["2027-12-25", "Christmas 圣诞节", 3, "Holiday Home / Gift / Winter"]]; const L={3:["🔴 超级重要","b3"],2:["🟠 重要","b2"],1:["🟡 一般","b1"]};
+const key="usecom-products";let products=JSON.parse(localStorage.getItem(key)||"[]");
+function D(s){return new Date(s+"T00:00:00")} function T(){let x=new Date();return new Date(x.getFullYear(),x.getMonth(),x.getDate())}
+function diff(a,b){return Math.ceil((a-b)/86400000)} function save(){localStorage.setItem(key,JSON.stringify(products));}
+function render(){
+let now=T(),future=E.filter(x=>D(x[0])>=now&&x[2]>=2).sort((a,b)=>D(a[0])-D(b[0])),n=future[0];
+pcount.textContent=products.length;
+if(n){let z=diff(D(n[0]),now);nextName.textContent=n[1];nextDate.textContent=n[0];days.textContent=z;big.textContent=n[1];badge.textContent=L[n[2]][0];badge.className="badge "+L[n[2]][1];advice.textContent=n[3];
+let labels=z>60?["研究竞品/关键词","确定主推SKU","估算库存","制定促销方案"]:z>30?["准备图片和视频","广告测试","确认补货数量","优化Listing"]:z>14?["确认库存到货时间","确定促销价格","扩大广告测试","准备Email/社媒"]:z>7?["确认库存","确认优惠券/折扣","增加广告预算","检查物流"]:["全面检查库存","确认所有促销","提高广告预算","监控订单"];timeline.innerHTML=labels.map((a,i)=>`<div class="task"><span>☐ ${a}</span><span class="muted">${i+1}/4</span></div>`).join("")}
+n90.textContent=E.filter(x=>{let z=diff(D(x[0]),now);return z>=0&&z<=90&&x[2]>=2}).length;
+let z=n?diff(D(n[0]),now):99,ts=z<=7?["确认库存和补货","检查广告素材","确认促销价格","检查物流"]:z<=14?["确认促销方案","扩大广告测试","检查Listing","准备Email/社媒"]:z<=30?["完成广告测试","确认补货数量","制作节日素材","优化Listing"]:["研究关键词和竞品","确定主推产品","估算库存","制定营销方案"];
+tasks.innerHTML=ts.map((x,i)=>`<div class="task"><label><input type="checkbox" data-k="${x}" onchange="toggleTask(this)"> ${x}</label><span class="muted">建议任务</span></div>`).join("");
+renderProducts();renderCalendar();
+}
+function toggleTask(c){localStorage.setItem("task:"+c.dataset.k,c.checked?"1":"0")}
+function renderProducts(){productsRows.innerHTML=products.length?products.map((p,i)=>`<tr><td><b>${p.name}</b><div class="muted">${p.note||""}</div></td><td>$${p.cost.toFixed(2)}</td><td>$${p.price.toFixed(2)}</td><td>${((p.price-p.cost)/p.price*100).toFixed(1)}%</td><td>${p.stock}</td><td>${p.ship} 天</td><td><button onclick="delProduct(${i})">删除</button></td></tr>`).join(""):`<tr><td colspan="7" class="muted">还没有产品。点击“添加产品”建立你的地毯产品库。</td></tr>`}
+function openProduct(){modal.style.display="flex"}function closeProduct(){modal.style.display="none"}
+function saveProduct(){let p={name:pn.value.trim()||"未命名产品",cost:+pc.value||0,price:+pp.value||0,stock:+pi.value||0,ship:+pt.value||0,note:ps.value};products.push(p);save();closeProduct();["pn","pc","pp","pi","pt","ps"].forEach(x=>document.getElementById(x).value="");render()}
+function delProduct(i){if(confirm("删除这个产品？")){products.splice(i,1);save();render()}}
+function renderCalendar(){let y=year.value,im=imp.value,q=document.getElementById("q").value.toLowerCase();let a=E.filter(x=>x[0].startsWith(y)&&(im=="all"||x[2]==+im)&&x.join(" ").toLowerCase().includes(q));rows.innerHTML=a.map(x=>`<tr><td>${x[0]}</td><td><b>${x[1]}</b></td><td><span class="badge ${L[x[2]][1]}">${L[x[2]][0]}</span></td><td>${x[3]}</td><td><button onclick="alert('已加入重点关注：${x[1]}')">🔔 关注</button></td></tr>`).join("")}
+function showTab(id,el){["dashboard","products","calendar"].forEach(x=>document.getElementById(x).style.display=x==id?"block":"none");document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));el.classList.add("active")}
+["year","imp","q"].forEach(id=>document.getElementById(id).addEventListener("input",renderCalendar));
+setInterval(()=>{clock.textContent=new Date().toLocaleString("zh-CN")},1000);render();
+</script></body></html>
